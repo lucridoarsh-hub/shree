@@ -1,0 +1,17 @@
+const P = { width: 22, height: 22, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round" };
+export const Store = (p) => <svg {...P} {...p}><path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0M9 20v-6h6v6" /></svg>;
+export const Phone = (p) => <svg {...P} {...p}><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" /></svg>;
+export const Search = (p) => <svg {...P} {...p}><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.5-4.5" /></svg>;
+export const Heart = (p) => <svg {...P} {...p}><path d="M12 20s-8-5-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 9c0 6-8 11-8 11z" /></svg>;
+export const Bag = (p) => <svg {...P} {...p}><path d="M5 8h14l-1 12H6L5 8zM9 8a3 3 0 016 0" /></svg>;
+export const User = (p) => <svg {...P} {...p}><circle cx="12" cy="8" r="4" /><path d="M4 21c1-5 15-5 16 0" /></svg>;
+export const Menu = (p) => <svg {...P} {...p}><path d="M3 7h18M3 12h18M3 17h18" /></svg>;
+export const Chevron = (p) => <svg {...P} width={18} height={18} {...p}><path d="M6 9l6 6 6-6" /></svg>;
+export const Pin = (p) => <svg {...P} width={18} height={18} {...p}><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" /><circle cx="12" cy="10" r="2.5" /></svg>;
+export const Up = (p) => <svg {...P} {...p}><path d="M12 19V5M5 12l7-7 7 7" /></svg>;
+export const Truck = (p) => <svg {...P} width={30} height={30} {...p}><path d="M2 6h11v10H2zM13 9h4l3 3v4h-7M6 19a2 2 0 100-4 2 2 0 000 4zM17 19a2 2 0 100-4 2 2 0 000 4z" /></svg>;
+export const Shield = (p) => <svg {...P} width={56} height={56} {...p}><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM8.5 12l2.5 2.5 4.5-5" /></svg>;
+export const Refresh = (p) => <svg {...P} width={56} height={56} {...p}><path d="M20 12a8 8 0 01-14 5M4 12a8 8 0 0114-5M18 3v4h-4M6 21v-4h4" /></svg>;
+export const Seal = (p) => <svg {...P} width={56} height={56} {...p}><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><path d="M8 20l-1 2 3-1M16 20l1 2-3-1" /></svg>;
+export const WhatsApp = (p) => <svg viewBox="0 0 24 24" width={28} height={28} fill="currentColor" {...p}><path d="M12 2a10 10 0 00-8.6 15L2 22l5.1-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.400-.7-1.600-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.500 6.500 0 01-3.200-2.800c-.2-.4.200-.4.700-1.300.1-.2 0-.3 0-.4l-.7-1.600c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 00-.7.3 2.800 2.800 0 00-.9 2.100 4.900 4.900 0 001 2.600 11.200 11.200 0 004.300 3.800c1.600.7 2.200.7 3 .6a2.600 2.600 0 001.700-1.200 2.100 2.100 0 00.1-1.200c-.1-.1-.2-.2-.5-.3z" /></svg>;
+export const ICONS = { shield: Shield, refresh: Refresh, seal: Seal };
