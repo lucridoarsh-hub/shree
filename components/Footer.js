@@ -1,12 +1,15 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { footer } from "@/data/stores";
-import { pageHref } from "@/data/catalog";
 import { WhatsApp, Up } from "./Icons";
+import { waLink } from "@/lib/format";
 
-export default function Footer() {
+const SOCIALS = [["facebook", "f", "Facebook"], ["instagram", "ig", "Instagram"], ["twitter", "x", "X"], ["youtube", "yt", "YouTube"]];
+const ORDER = ["About", "Jewellery Guide", "Media", "Policies", "Quick Links"];
+
+export default function Footer({ s, pages }) {
   const [done, setDone] = useState(false);
+  const [err, setErr] = useState("");
   const [showUp, setShowUp] = useState(false);
   useEffect(() => {
     const f = () => setShowUp(window.scrollY > 400);
@@ -14,50 +17,66 @@ export default function Footer() {
     return () => window.removeEventListener("scroll", f);
   }, []);
 
+  const subscribe = async (e) => {
+    e.preventDefault();
+    setErr("");
+    const email = new FormData(e.currentTarget).get("email");
+    const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) }).catch(() => null);
+    if (r?.ok) setDone(true);
+    else setErr((await r?.json().catch(() => ({})))?.error || "Something went wrong. Please try again.");
+  };
+
+  // Footer columns come from the Info Pages (grouped); "About" also links the built-in About and FAQ pages.
+  const groups = {};
+  for (const p of pages) (groups[p.group] ||= []).push({ label: p.title, href: `/info/${p.slug}` });
+  groups.About = [{ label: "About Us", href: "/about" }, ...(groups.About || []), { label: "FAQ's", href: "/faq" }];
+  const cols = [...ORDER, ...Object.keys(groups).filter((g) => !ORDER.includes(g))].filter((g) => groups[g]);
+  const wa = waLink(s.whatsapp, `Hello ${s.siteName}, I would like to consult about jewellery.`);
+
   return (
     <footer>
       <section className="news">
-        <h4>Join Our Newsletter Now!</h4>
-        <p>Be the first to know about new designs, events, and more!</p>
+        <h4>{s.newsletterTitle}</h4>
+        <p>{s.newsletterText}</p>
         {done ? (
-          <div className="ok">Thank you for subscribing (demo).</div>
+          <div className="ok">Thank you for subscribing.</div>
         ) : (
-          <form onSubmit={(e) => { e.preventDefault(); setDone(true); }}>
-            <input type="email" required placeholder="Email" aria-label="Email" />
+          <form onSubmit={subscribe}>
+            <input type="email" name="email" required placeholder="Email" aria-label="Email" />
             <button className="btn solid" type="submit">Subscribe</button>
           </form>
         )}
+        {err && <p className="form-err">{err}</p>}
       </section>
       <div className="foot">
         <div className="container">
           <div className="foot-top">
             <div className="contact">
-              <div><small>Call Us</small><b>+91 93461 04233</b></div>
-              <div><small>Email Us</small><b>care@sreesivanijewellers.com</b></div>
+              <div><small>Call Us</small><b>{s.phone}</b></div>
+              <div><small>Email Us</small><b>{s.email}</b></div>
             </div>
             <div className="social">
-              {["f", "ig", "x", "wa"].map((s) => <a key={s} href={s === "wa" ? "https://wa.me/919346104233" : "#"} aria-label={s}{...(s === "wa" ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{s}</a>)}
+              {SOCIALS.filter(([k]) => s[k]).map(([k, t, label]) => <a key={k} href={s[k]} aria-label={label} target="_blank" rel="noopener noreferrer">{t}</a>)}
+              <a href={wa} aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">wa</a>
             </div>
           </div>
           <div className="cols">
-            {Object.entries(footer).map(([h, items]) => (
+            {cols.map((h) => (
               <div key={h}>
                 <h5>{h}</h5>
-                <ul>{items.map((i) => <li key={i}><Link href={i === "About Us" ? "/about" : i.startsWith("FAQ") ? "/faq" : pageHref(i)}>{i}</Link></li>)}</ul>
+                <ul>{groups[h].map((i) => <li key={i.href}><Link href={i.href}>{i.label}</Link></li>)}</ul>
               </div>
             ))}
           </div>
           <div className="help">
-            <div>Ph: +91 93461 04233<br />(Mon To Saturday 10AM-6.30PM)</div>
-            <div>General: care@sreesivanijewellers.com<br />Corporate: b2b@sreesivanijewellers.com</div>
+            <div>Ph: {s.phone}<br />({s.hours})</div>
+            <div>General: {s.email}<br />Corporate: {s.emailCorporate}</div>
             <div><Link href="/contact"><b>Contact us</b></Link> &nbsp;|&nbsp; <Link href="/stores"><b>Find a Store</b></Link></div>
           </div>
-          <div className="copy">
-            @Sree Sivani Jewellers 2026. All rights reserved · Demo presentation website, not the official site.
-          </div>
+          <div className="copy">{s.copyright}</div>
         </div>
       </div>
-      <a className="wa" href="https://wa.me/919346104233" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WhatsApp /></a>
+      <a className="wa" href={wa} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><WhatsApp /></a>
       {showUp && (
         <button className="up" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top"><Up /></button>
       )}

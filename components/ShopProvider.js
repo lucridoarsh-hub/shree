@@ -8,27 +8,24 @@ const load = (k) => {
   try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; }
 };
 
-export default function ShopProvider({ children }) {
+// Holds the wishlist (saved in the visitor's browser) and the public site settings
+// that client components need (WhatsApp number, price visibility ...).
+export default function ShopProvider({ site, children }) {
   const [wish, setWish] = useState([]);
-  const [cart, setCart] = useState([]);
   const [ready, setReady] = useState(false);
 
+  // Read the saved wishlist after hydration (localStorage is not available on the server).
   useEffect(() => {
-    setWish(load("jl-wish"));
-    setCart(load("jl-cart"));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setWish(load("ssj-wish"));
     setReady(true);
   }, []);
   useEffect(() => {
     if (!ready) return;
-    try {
-      localStorage.setItem("jl-wish", JSON.stringify(wish));
-      localStorage.setItem("jl-cart", JSON.stringify(cart));
-    } catch {}
-  }, [wish, cart, ready]);
+    try { localStorage.setItem("ssj-wish", JSON.stringify(wish)); } catch {}
+  }, [wish, ready]);
 
   const toggleWish = (id) => setWish((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
-  const addCart = (id) => setCart((c) => (c.includes(id) ? c : [...c, id]));
-  const removeCart = (id) => setCart((c) => c.filter((x) => x !== id));
 
-  return <Ctx.Provider value={{ wish, cart, toggleWish, addCart, removeCart }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ wish, toggleWish, site }}>{children}</Ctx.Provider>;
 }

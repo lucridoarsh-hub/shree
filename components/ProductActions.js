@@ -1,18 +1,14 @@
 "use client";
-import Link from "next/link";
 import { useShop } from "./ShopProvider";
+import { WhatsApp } from "./Icons";
+import { productWaLink } from "@/lib/format";
 
-export default function ProductActions({ id }) {
-  const { cart, wish, addCart, toggleWish } = useShop();
-  const inCart = cart.includes(id);
+export default function ProductActions({ p }) {
+  const { wish, toggleWish, site } = useShop();
   return (
     <div className="btns">
-      {inCart ? (
-        <Link className="btn solid" href="/cart">Go to Cart</Link>
-      ) : (
-        <button className="btn solid" onClick={() => addCart(id)}>Add to Cart</button>
-      )}
-      <button className="btn" onClick={() => toggleWish(id)}>{wish.includes(id) ? "♥ Wishlisted" : "♡ Add to Wishlist"}</button>
+      <a className="btn wa-btn" href={productWaLink(site, p)} target="_blank" rel="noopener noreferrer"><WhatsApp width={20} height={20} /> {site.whatsappCta}</a>
+      <button className="btn" onClick={() => toggleWish(p.id)}>{wish.includes(p.id) ? "♥ Wishlisted" : "♡ Add to Wishlist"}</button>
     </div>
   );
 }

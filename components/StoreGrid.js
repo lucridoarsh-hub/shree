@@ -2,9 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Pin } from "./Icons";
-import { stores } from "@/data/stores";
 
-export default function StoreGrid() {
+export default function StoreGrid({ stores }) {
   const [q, setQ] = useState("");
   const term = q.trim().toLowerCase();
   const list = term
@@ -19,7 +18,7 @@ export default function StoreGrid() {
       <p className="count">{list.length} store{list.length === 1 ? "" : "s"} in Hyderabad</p>
       <div className="grid">
         {list.map((s) => (
-          <article className="card" key={s.id}>
+          <article className="card" key={s.slug}>
             <Link href={`/stores/hyderabad/${s.slug}`} className="ph">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={s.image} alt={s.name} loading="lazy" />

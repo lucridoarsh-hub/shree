@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Chevron } from "./Icons";
-import { faqs } from "@/data/stores";
 
-export default function Faq() {
+export default function Faq({ faqs }) {
   const [open, setOpen] = useState(0);
   return (
     <div className="faq">

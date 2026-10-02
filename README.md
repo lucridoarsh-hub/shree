@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sree Sivani Jewellers website
 
-## Getting Started
+Next.js + MongoDB storefront with an admin panel at `/admin`. Customers enquire on WhatsApp (no cart).
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Copy `.env.example` to `.env.local` and fill it in (`MONGODB_URL`, `MONGODB_DB`, `ADMIN_USER`, `ADMIN_PASSWORD`, `SESSION_SECRET`, `SITE_URL`).
+2. `npm install`
+3. `npm run seed` – fills an empty database with starter categories, products, stores, pages, FAQs and gold rates (`-- --reset` wipes and refills them).
+4. `npm run dev` (development) or `npm run build && npm start` (production).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Admin panel (`/admin`)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Products, categories, offers, stores, info pages, FAQs, gold rates, site settings (logo, WhatsApp number, header bar, home banner, About page, footer), customer messages and newsletter subscribers. Changes are live immediately.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Images
 
-## Learn More
+Uploads are saved to `public/uploads` (or `UPLOAD_DIR` if set) and served from `/uploads/<file>`. On the VPS set `UPLOAD_DIR` to a folder outside the release directory so deployments never delete images, and back it up.
 
-To learn more about Next.js, take a look at the following resources:
+## VPS notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Run with `npm run build && npm start` under pm2/systemd, behind nginx with HTTPS.
+- nginx: set `client_max_body_size 64m;` (video/image uploads) and forward `X-Forwarded-Proto` / `X-Forwarded-For`.
+- nginx must overwrite the client IP header (`proxy_set_header X-Forwarded-For $remote_addr;`) so the login rate limit cannot be bypassed by spoofing.
+- In MongoDB Atlas, allow the VPS IP under Network Access.
+- Change `ADMIN_PASSWORD` and `SESSION_SECRET` to your own long values.
